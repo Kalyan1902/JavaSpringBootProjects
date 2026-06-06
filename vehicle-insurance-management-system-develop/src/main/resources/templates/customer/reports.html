@@ -1,0 +1,55 @@
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Reports - Vehicle Insurance</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/customer-header :: header('reports')}"></div>
+
+<div class="container">
+    <h4 class="page-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 10px;">Reports</h4>
+    <p class="subtext" style="font-size: 0.95rem; color: #666; margin-bottom: 25px;">Generate and view your insurance reports</p>
+
+    <div class="form-row" style="display: flex; gap: 20px;">
+        <div class="card" style="flex: 1; padding: 25px; border: 1px solid #eee; border-radius: 8px;">
+            <div style="display:flex; gap:12px; align-items:center;">
+                <i class="bi bi-file-earmark-text" style="font-size: 22px; color: #16a34a;"></i>
+                <div style="font-weight: 600; font-size: 1.1rem;">Policy Report</div>
+            </div>
+
+            <p style="color: #666; font-size: 0.9rem; margin-top: 12px; line-height: 1.5;">
+                Generate a comprehensive report of all your insurance policies including coverage and premium details.
+            </p>
+
+            <a class="btn" th:href="@{/customer/reports/policies}"
+               style="display: inline-block; margin-top: 15px; padding: 8px 18px; font-size: 0.85rem; font-weight: 600; border: 2px solid #333; border-radius: 4px; color: #333; text-decoration: none; background: #fff;">
+                View Policy Report
+            </a>
+        </div>
+
+        <div class="card" style="flex: 1; padding: 25px; border: 1px solid #eee; border-radius: 8px;">
+            <div style="display:flex; gap:12px; align-items:center;">
+                <i class="bi bi-file-earmark-check" style="font-size: 22px; color: #16a34a;"></i>
+                <div style="font-weight: 600; font-size: 1.1rem;">Claim Report</div>
+            </div>
+
+            <p style="color: #666; font-size: 0.9rem; margin-top: 12px; line-height: 1.5;">
+                View a detailed history of all claims filed across your account, including their status and settled amounts.
+            </p>
+
+            <a class="btn" th:href="@{/customer/reports/claims}"
+               style="display: inline-block; margin-top: 15px; padding: 8px 18px; font-size: 0.85rem; font-weight: 600; border: 2px solid #333; border-radius: 4px; color: #333; text-decoration: none; background: #fff;">
+                View Claim Report
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

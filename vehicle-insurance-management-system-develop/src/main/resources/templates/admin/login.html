@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Admin Login - Vehicle Insurance</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --input-bg: #ffffff;
+            --input-border: #ddd;
+            --field-height: 42px;
+        }
+
+        /* Common style for both Email input and Password group */
+        .field-style {
+            width: 100%;
+            height: var(--field-height);
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        /* Specific for Email input */
+        input[type="email"].field-style {
+            padding: 10px;
+            outline: none;
+            display: block;
+        }
+
+        /* Specific for Password group container */
+        .password-group {
+            display: flex;
+            overflow: hidden;
+        }
+
+        .password-group input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none !important;
+            background-color: transparent !important;
+            outline: none;
+            height: 100%;
+            font-size: 0.9rem;
+        }
+
+        .password-group .eye-addon {
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            background-color: transparent;
+            cursor: pointer;
+            color: black !important;
+            font-size: 0.9rem;
+        }
+
+        /* Focus effects for both */
+        .field-style:focus, .password-group:focus-within {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        input::-ms-reveal, input::-ms-clear { display: none; }
+    </style>
+</head>
+<body class="auth-wrap">
+
+<div class="auth-card" style="border:none; padding: 35px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    <div class="auth-head">
+        <img th:src="@{/images/logo.svg}" alt="logo" style="filter:brightness(10);" src=""/>
+        <div>
+            <h1 class="auth-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 5px;">Admin Portal</h1>
+            <div class="auth-sub" style="font-size: 0.9rem; color: #666;">Login to manage data</div>
+        </div>
+    </div>
+
+    <div th:if="${param.error}"
+         style="margin-bottom:12px; background:#f8d7da; color:#842029;
+            padding:10px; border-radius:6px;">
+        Invalid admin email or password.
+    </div>
+
+    <div th:if="${param.onlyAdmin}"
+         style="margin-bottom:12px; background:#f8d7da; color:#842029;
+            padding:10px; border-radius:6px;">
+        Only admins are allowed to log in here.
+    </div>
+    <form th:action="@{/admin/login}" method="post">
+        <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div style="margin-bottom:15px;">
+            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Email</label>
+            <input name="username" type="email" class="field-style" placeholder="admin@insurance.com" required>
+        </div>
+
+        <div style="margin-bottom:20px;">
+            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Password</label>
+            <div class="password-group field-style">
+                <input id="adminPass" name="password" type="password" placeholder="Enter your password" required>
+                <span class="eye-addon"
+                      onclick="let p = document.getElementById('adminPass'); p.type = p.type === 'password' ? 'text' : 'password'; this.children[0].classList.toggle('bi-eye'); this.children[0].classList.toggle('bi-eye-slash');">
+                    <i class="bi bi-eye"></i>
+                </span>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%; justify-content:center; padding: 12px; font-weight: 600; border-radius: 6px;" type="submit">
+            Login to Admin Panel
+        </button>
+    </form>
+
+
+    <div style="margin-top: 25px; text-align: center; font-size: 0.9rem; color: #666;">
+        Not an admin?
+        <a th:href="@{/login}" style="color: #0d6efd; text-decoration: none; font-weight: 600;">
+            Customer Login
+        </a>
+    </div>
+</div>
+
+
+</body>
+</html>

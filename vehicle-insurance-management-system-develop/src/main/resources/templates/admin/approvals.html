@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Approvals - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-header :: header('approvals')}"></div>
+
+<div class="container">
+    <h4 class="page-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 10px;">Claims Approval</h4>
+    <p class="subtext" style="font-size: 0.95rem; color: #666; margin-bottom: 25px;">Review and approve/reject insurance claims</p>
+
+    <div th:if="${param.approved}" class="alert success" style="margin-bottom:14px; color: green; font-size: 0.9rem;">Claim approved.</div>
+    <div th:if="${param.rejected}" class="alert success" style="margin-bottom:14px; color: green; font-size: 0.9rem;">Claim rejected.</div>
+
+    <div class="card" style="padding: 25px; border: 1px solid #eee; border-radius: 8px;">
+        <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px;">Claim Review Table</div>
+
+        <table class="table">
+            <thead>
+            <tr style="font-size: 0.9rem;">
+                <th>Claim ID</th>
+                <th>Policy Number</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Reason</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+
+            <tbody style="font-size: 0.95rem;">
+            <tr th:each="c : ${claims}">
+                <td th:text="${c.claimId}">1</td>
+                <td th:text="${c.policy.policyNumber}">POL-2024-0001</td>
+                <td th:text="${c.policy.vehicle.customer.name}">John Doe</td>
+                <td th:text="${c.claimAmount}">5000</td>
+                <td th:text="${c.claimReason}">Accident damage</td>
+                <td th:text="${c.claimDate}">2024-06-15</td>
+                <td><span class="badge submitted" style="font-weight: 600; font-size: 0.75rem;">SUBMITTED</span></td>
+
+                <td style="display:flex;gap:10px;flex-wrap:wrap;">
+
+                    <form th:action="@{/admin/approvals/{id}/approve(id=${c.claimId})}" method="post">
+                        <input type="hidden" th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}"/>
+
+                        <button class="btn btn-success" style="padding: 6px 12px; font-size: 0.85rem; border-radius: 4px;" type="submit">
+                            <i class="bi bi-check-circle"></i> Approve
+                        </button>
+                    </form>
+
+                    <form th:action="@{/admin/approvals/{id}/reject(id=${c.claimId})}" method="post">
+                        <input type="hidden" th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}"/>
+
+                        <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.85rem; border-radius: 4px;" type="submit">
+                            <i class="bi bi-x-circle"></i> Reject
+                        </button>
+                    </form>
+
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(claims)}">
+                <td colspan="8" style="color:var(--muted); padding: 20px; text-align: center;">No submitted claims found.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top:15px; color: #888; font-size: 13px;">
+            Only SUBMITTED claims appear here. Approved/Rejected claims are not listed.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

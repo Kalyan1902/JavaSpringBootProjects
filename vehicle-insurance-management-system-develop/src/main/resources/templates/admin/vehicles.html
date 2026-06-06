@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Vehicles - Admin</title>
+
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body class="admin-page">
+
+<div th:replace="fragments/admin-header :: header('vehicles')"></div>
+
+<div class="container">
+    <h4 class="page-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 10px;">Vehicle Management</h4>
+    <p class="subtext" style="font-size: 0.95rem; color: #666; margin-bottom: 25px;">View and manage all registered vehicles</p>
+
+    <div class="card" style="padding: 25px; border: 1px solid #eee; border-radius: 8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+            <div style="font-weight: 600; font-size: 1.1rem;">Vehicle List</div>
+            <div style="color: #888; font-size: 13px;">
+                Total: <b style="font-weight: 600;" th:text="${#lists.size(vehicles)}">0</b>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr style="font-size: 0.9rem;">
+                <th>Vehicle ID</th>
+                <th>Registration</th>
+                <th>Owner</th>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Type</th>
+                <th>Created</th>
+            </tr>
+            </thead>
+
+            <tbody style="font-size: 0.95rem;">
+            <tr th:each="v : ${vehicles}">
+                <td th:text="${v.vehicleId}"></td>
+                <td th:text="${v.registrationNumber}"></td>
+                <td th:text="${v.customer.name}"></td>
+                <td th:text="${v.make}"></td>
+                <td th:text="${v.model}"></td>
+                <td th:text="${v.yearOfManufacture}"></td>
+
+                <td>
+                    <span class="badge vehicle-type"
+                          style="font-weight: 600; font-size: 0.75rem;"
+                          th:text="${v.vehicleType}"
+                          th:classappend="' ' + ${v.vehicleType.name().toLowerCase()}">
+                    </span>
+                </td>
+
+                <td th:text="${v.createdDate}"></td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(vehicles)}">
+                <td colspan="8" style="color:var(--muted); padding: 20px; text-align: center;">
+                    No vehicles found.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

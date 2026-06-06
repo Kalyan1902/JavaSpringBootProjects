@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-header :: header('dash')}"></div>
+
+<div class="container">
+    <h4 class="page-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 10px;">Dashboard Overview</h4>
+    <p class="subtext" style="font-size: 0.95rem; color: #666; margin-bottom: 25px;">Welcome to the Vehicle Insurance Management System</p>
+
+    <div class="grid-4">
+        <div class="card stat stat-blue" style="padding: 20px; border-radius: 8px;">
+            <div>
+                <div class="label" style="font-weight: 600; font-size: 0.9rem;">Total Customers</div>
+                <div class="value" style="font-weight: 600; font-size: 1.8rem;" th:text="${totalCustomers}">0</div>
+            </div>
+        </div>
+
+        <div class="card stat stat-green" style="padding: 20px; border-radius: 8px;">
+            <div>
+                <div class="label" style="font-weight: 600; font-size: 0.9rem;">Total Vehicles</div>
+                <div class="value" style="font-weight: 600; font-size: 1.8rem;" th:text="${totalVehicles}">0</div>
+            </div>
+        </div>
+
+        <div class="card stat stat-yellow" style="padding: 20px; border-radius: 8px;">
+            <div>
+                <div class="label" style="font-weight: 600; font-size: 0.9rem;">Total Policies</div>
+                <div class="value" style="font-weight: 600; font-size: 1.8rem;" th:text="${totalPolicies}">0</div>
+            </div>
+        </div>
+
+        <div class="card stat stat-grey" style="padding: 20px; border-radius: 8px;">
+            <div>
+                <div class="label" style="font-weight: 600; font-size: 0.9rem;">Pending Claims</div>
+                <div class="value" style="font-weight: 600; font-size: 1.8rem;" th:text="${pendingClaims}">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row" style="margin-top:25px;">
+        <div class="card" style="padding: 25px; border: 1px solid #eee; border-radius: 8px;">
+            <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px;">
+                Claims Overview
+            </div>
+
+            <div class="form-row" style="display: flex; gap: 20px;">
+                <div class="card" style="background:#f8faff; flex: 1; padding: 20px; border: none; border-radius: 8px;">
+                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Approved Claims</div>
+                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px; color: #2e7d32;" th:text="${approvedClaims}">0</div>
+                </div>
+                <div class="card" style="background:#f8faff; flex: 1; padding: 20px; border: none; border-radius: 8px;">
+                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Pending Claims</div>
+                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px; color: #d32f2f;" th:text="${pendingClaims}">0</div>
+                </div>
+            </div>
+
+            <div style="margin-top:25px; padding-top: 15px; border-top: 1px solid #eee;">
+                <a class="btn btn-primary" style="padding: 8px 18px; font-size: 0.9rem; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;" th:href="@{/admin/approvals}">
+                    <i class="bi bi-arrow-right-circle"></i> Go to Approvals
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<!--<!doctype html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="utf-8"/>-->
+<!--    <meta name="viewport" content="width=device-width,initial-scale=1"/>-->
+<!--    <title>Admin Dashboard</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/app.css}"/>-->
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div th:replace="~{fragments/admin-header :: header('dash')}"></div>-->
+
+<!--<div class="container">-->
+<!--    <h4 class="page-title">Dashboard Overview</h4>-->
+<!--    <p class="subtext">Welcome to the Vehicle Insurance Management System</p>-->
+
+<!--    <div class="grid-4">-->
+<!--        <div class="card stat stat-blue">-->
+<!--            <div>-->
+<!--                <div class="label">Total Customers</div>-->
+<!--                <div class="value" th:text="${totalCustomers}">0</div>-->
+<!--            </div>-->
+<!--            <i class="bi bi-people text-muted"></i>-->
+<!--        </div>-->
+
+<!--        <div class="card stat stat-green">-->
+<!--            <div>-->
+<!--                <div class="label">Total Vehicles</div>-->
+<!--                <div class="value" th:text="${totalVehicles}">0</div>-->
+<!--            </div>-->
+<!--            <i class="bi bi-car-front text-muted"></i>-->
+<!--        </div>-->
+
+<!--        <div class="card stat stat-yellow">-->
+<!--            <div>-->
+<!--                <div class="label">Total Policies</div>-->
+<!--                <div class="value" th:text="${totalPolicies}">0</div>-->
+<!--            </div>-->
+<!--            <i class="bi bi-file-earmark-text text-muted"></i>-->
+<!--        </div>-->
+
+<!--        <div class="card stat stat-grey">-->
+<!--            <div>-->
+<!--                <div class="label">Pending Claims</div>-->
+<!--                <div class="value" th:text="${pendingClaims}">0</div>-->
+<!--            </div>-->
+<!--            <i class="bi bi-clock-history text-muted"></i>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="form-row" style="margin-top:25px;">-->
+<!--        <div class="card">-->
+<!--            <div class="card-header">Claims Overview</div>-->
+
+<!--            <div class="form-row">-->
+<!--                <div class="card" style="background:#f8faff; border: none; margin-bottom: 0;">-->
+<!--                    <div class="label" style="font-size: 0.8rem;">Approved Claims</div>-->
+<!--                    <div class="value" style="font-size: 1.5rem;" th:text="${approvedClaims}">0</div>-->
+<!--                </div>-->
+<!--                <div class="card" style="background:#f8faff; border: none; margin-bottom: 0;">-->
+<!--                    <div class="label" style="font-size: 0.8rem;">Pending Claims</div>-->
+<!--                    <div class="value" style="font-size: 1.5rem;" th:text="${pendingClaims}">0</div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div style="margin-top:20px;">-->
+<!--                <a class="btn btn-primary" th:href="@{/admin/approvals}">-->
+<!--                    <i class="bi bi-arrow-right-circle"></i> Go to Approvals-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->

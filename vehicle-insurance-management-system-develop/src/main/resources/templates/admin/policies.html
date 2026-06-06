@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Policies - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+<div th:replace="fragments/admin-header :: header('policies')"></div>
+
+<div class="container">
+    <h4 class="page-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 10px;">Policy Management</h4>
+    <p class="subtext" style="font-size: 0.95rem; color: #666; margin-bottom: 25px;">View and manage insurance policies</p>
+
+    <div class="card" style="padding: 25px; border: 1px solid #eee; border-radius: 8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+            <div style="font-weight: 600; font-size: 1.1rem;">Policy List</div>
+            <div style="color: #888; font-size: 13px;">
+                Total: <b style="font-weight: 600;" th:text="${#lists.size(policies)}">0</b>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr style="font-size: 0.9rem;">
+                <th>Policy Number</th>
+                <th>Customer</th>
+                <th>Vehicle</th>
+                <th>Coverage</th>
+                <th>Premium</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody style="font-size: 0.95rem;">
+            <tr th:each="p : ${policies}">
+                <td th:text="${p.policyNumber}">POL</td>
+                <td th:text="${p.vehicle.customer.name}">John</td>
+                <td th:text="${p.vehicle.make + ' ' + p.vehicle.model + ' (' + p.vehicle.registrationNumber + ')'}">Toyota</td>
+                <td th:text="${p.coverageAmount}">50000</td>
+                <td th:text="${p.premiumAmount}">1200</td>
+                <td th:text="${p.startDate}">2024-01-01</td>
+                <td th:text="${p.endDate}">2025-01-01</td>
+                <td>
+                    <span class="badge active" th:if="${p.policyStatus.name()=='ACTIVE'}" style="font-weight: 600; font-size: 0.75rem;">ACTIVE</span>
+                    <span class="badge" th:if="${p.policyStatus.name()=='EXPIRED'}" style="background:#f3f4f6; color:#111827; font-weight: 600; font-size: 0.75rem;">EXPIRED</span>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(policies)}">
+                <td colspan="8" style="color:var(--muted); padding: 20px; text-align: center;">No policies found.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

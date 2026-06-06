@@ -1,0 +1,69 @@
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Register - Vehicle Insurance</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body class="auth-wrap">
+
+<div class="auth-card" style="padding: 35px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; max-width: 600px;">
+    <div class="auth-head">
+        <img th:src="@{/images/logo.svg}" alt="logo" src=""/>
+        <div>
+            <h1 class="auth-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 5px;">Create Account</h1>
+            <div class="auth-sub" style="font-size: 0.9rem; color: #666;">Register to manage vehicles, policies and claims</div>
+        </div>
+    </div>
+
+    <div th:if="${error}" class="alert error" style="margin-bottom:12px; font-size: 0.85rem;" th:text="${error}">Error</div>
+
+    <form th:action="@{/customer/register}" method="post" th:object="${customer}">
+        <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Full Name</label>
+                <input th:field="*{name}" placeholder="Enter your name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-text" style="font-size: 0.8rem; color: red; margin-top: 4px;"></div>
+            </div>
+            <div style="flex: 1;">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Email</label>
+                <input type="email" th:field="*{email}" placeholder="Enter your email" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-text" style="font-size: 0.8rem; color: red; margin-top: 4px;"></div>
+            </div>
+        </div>
+
+        <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 15px;">
+            <div style="flex: 1;">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Phone</label>
+                <input th:field="*{phone}" placeholder="Enter your phone" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="error-text" style="font-size: 0.8rem; color: red; margin-top: 4px;"></div>
+            </div>
+            <div style="flex: 1;">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Password</label>
+                <input type="password" th:field="*{password}" placeholder="Create a password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-text" style="font-size: 0.8rem; color: red; margin-top: 4px;"></div>
+            </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Address</label>
+            <input th:field="*{address}" placeholder="Enter your address" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="error-text" style="font-size: 0.8rem; color: red; margin-top: 4px;"></div>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%; justify-content:center; padding: 12px; font-weight: 600; border-radius: 6px; cursor: pointer;" type="submit">
+            Register
+        </button>
+    </form>
+
+    <div class="auth-footer" style="margin-top: 20px; font-size: 0.9rem;">
+        Already have an account?
+        <a th:href="@{/customer/login}" style="color:var(--primary); font-weight: 600; text-decoration: none;">Login</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="header(active)">
+    <div class="topbar" style="background: #fff; border-bottom: 1px solid #eee; padding-top: 10px;">
+        <div class="container">
+            <div style="display:flex;justify-content:space-between;align-items:center; margin-bottom: 10px;">
+                <div class="brand" style="display: flex; align-items: center; gap: 10px;">
+                    <img th:src="@{/images/logo.svg}" alt="logo" src="" style="width: 28px; height: 28px;"/>
+                    <span style="font-weight: 600; font-size: 1.75rem; color: var(--primary);">Vehicle Insurance</span>
+                </div>
+
+                <div style="display:flex;gap:15px;align-items:center;">
+                    <div style="color: #666; font-size: 0.9rem; font-weight: 500;"
+                         th:text="'Welcome, ' + (${customerName} ?: 'Customer')">Welcome</div>
+
+                    <form th:action="@{/customer/logout}" method="post" style="margin: 0;">
+                        <input type="hidden" th:if="${_csrf != null}"
+                               th:name="${_csrf.parameterName}"
+                               th:value="${_csrf.token}"/>
+
+                        <button class="btn" type="submit" style="padding: 6px 12px; font-size: 0.85rem; font-weight: 800; border-radius: 6px; border: 1px solid #333; background: #fff; cursor: pointer;">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="topbar" style="background: #fff; border-bottom: 1px solid #edf2f7; padding: 0px 0;">
+                <div class="container">
+
+                    <nav class="nav" style="display: flex; gap: 8px; align-items: center;">
+                        <a th:classappend="${active=='home'} ? 'active'" th:href="@{/customer/dashboard}" style="font-weight: 600; font-size: 0.9rem; padding: 12px 15px;">
+                            <i class="bi bi-house"></i> Home
+                        </a>
+                        <a th:classappend="${active=='vehicles'} ? 'active'" th:href="@{/customer/vehicles}" style="font-weight: 600; font-size: 0.9rem; padding: 12px 15px;">
+                            <i class="bi bi-car-front"></i> Vehicles
+                        </a>
+                        <a th:classappend="${active=='policies'} ? 'active'" th:href="@{/customer/policies}" style="font-weight: 600; font-size: 0.9rem; padding: 12px 15px;">
+                            <i class="bi bi-file-earmark-text"></i> Policies
+                        </a>
+                        <a th:classappend="${active=='claims'} ? 'active'" th:href="@{/customer/claims}" style="font-weight: 600; font-size: 0.9rem; padding: 12px 15px;">
+                            <i class="bi bi-exclamation-circle"></i> Claims
+                        </a>
+                        <a th:classappend="${active=='reports'} ? 'active'" th:href="@{/customer/reports}" style="font-weight: 600; font-size: 0.9rem; padding: 12px 15px;">
+                            <i class="bi bi-bar-chart"></i> Reports
+                        </a>
+                        <a th:classappend="${active=='profile'} ? 'active'" th:href="@{/customer/profile}" style="font-weight: 600; font-size: 0.9rem; padding: 12px 15px;">
+                            <i class="bi bi-person"></i> Profile
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

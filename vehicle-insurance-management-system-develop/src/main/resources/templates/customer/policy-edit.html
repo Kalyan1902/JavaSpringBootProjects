@@ -1,0 +1,62 @@
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Edit Policy</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/customer-header :: header('policies')}"></div>
+
+<div class="container">
+    <h4 class="page-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 10px;">Edit Policy</h4>
+    <p class="subtext" style="font-size: 0.95rem; color: #666; margin-bottom: 25px;">Update coverage amount (premium recalculates automatically)</p>
+
+    <div class="card" style="padding: 25px; border: 1px solid #eee; border-radius: 8px;">
+        <div style="margin-bottom:20px; color:#666; font-size: 0.95rem;">
+            Policy: <b style="font-weight: 600; color: #333;" th:text="${policy.policyNumber}">POL</b> |
+            Vehicle: <b style="font-weight: 600; color: #333;" th:text="${policy.vehicle.make + ' ' + policy.vehicle.model + ' (' + policy.vehicle.registrationNumber + ')'}">Vehicle</b>
+        </div>
+
+        <form th:action="@{/customer/policies/{id}/edit(id=${policy.policyId})}" method="post">
+
+            <input type="hidden" th:if="${_csrf != null}"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"/>
+
+            <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Current Coverage</label>
+                    <input th:value="${policy.coverageAmount}" disabled style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Current Premium</label>
+                    <input th:value="${policy.premiumAmount}" disabled style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9;">
+                </div>
+            </div>
+
+            <div style="margin-top:12px;">
+                <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">New Coverage Amount</label>
+                <input name="coverageAmount" type="number" min="1000" step="100"
+                       th:value="${policy.coverageAmount}" required
+                       style="width: 100%; max-width: 400px; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            </div>
+
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="btn btn-primary" type="submit" style="padding: 8px 24px; font-weight: 600; border-radius: 4px; cursor: pointer;">Save</button>
+                <a class="btn" th:href="@{/customer/policies}" style="padding: 8px 24px; font-weight: 600; border-radius: 4px; text-decoration: none; border: 1px solid #ddd; color: #333; background: #fff;">Back</a>
+            </div>
+        </form>
+
+        <div style="margin-top:15px; color: #888; font-size: 13px;">
+            Note: Only coverage & premium are updated here. Policy period remains same.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

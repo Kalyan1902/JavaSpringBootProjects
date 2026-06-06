@@ -1,0 +1,61 @@
+
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="header(active)">
+
+    <div style="background: #111827; color: #fff; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div class="container" style="padding: 0;"> <div style="display:flex; justify-content:space-between; align-items: stretch; height: 80px;"> <div style="display:flex; align-items:center; gap:12px; padding: 0 10px;">
+            <i class="bi bi-shield-shaded" style="font-size: 32px; color: #fff;"></i>
+            <div>
+                <div style="font-weight: 800; font-size: 22px; line-height: 1.1;">Admin Portal</div>
+                <div style="opacity: 0.7; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Vehicle Insurance Management</div>
+            </div>
+        </div>
+
+            <div style="display:flex; gap:20px; align-items:center; padding-right: 10px;">
+                <div style="opacity:.9; font-size: 0.95rem; font-weight: 600;"
+                     th:text="'Welcome, ' + (${adminName} ?: 'Admin')">
+                    Welcome, Admin
+                </div>
+                <!--                <div style="opacity:.9; font-size: 0.95rem;" th:text="'Welcome, ' + (${authEmail} ?: 'admin@insurance.com')">Welcome,Admin</div>-->
+
+                <form th:action="@{/admin/logout}" method="post" style="margin:0;">
+                    <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button class="btn" type="submit"
+                            style="background: #fff; color: #111827; border-radius: 8px; font-weight: 800; padding: 10px 20px; font-size: 0.9rem; border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div class="topbar" style="background: #fff; border-bottom: 1px solid #edf2f7; padding: 0px 0;">
+        <div class="container">
+            <nav class="nav" style="display: flex; gap: 8px; align-items: center;">
+                <a th:classappend="${active=='dash'} ? 'active'" th:href="@{/admin/dashboard}" class="nav-link">
+                    <i class="bi bi-grid"></i> Dashboard
+                </a>
+                <a th:classappend="${active=='customers'} ? 'active'" th:href="@{/admin/customers}" class="nav-link">
+                    <i class="bi bi-people"></i> Customers
+                </a>
+                <a th:classappend="${active=='vehicles'} ? 'active'" th:href="@{/admin/vehicles}" class="nav-link">
+                    <i class="bi bi-car-front"></i> Vehicles
+                </a>
+                <a th:classappend="${active=='policies'} ? 'active'" th:href="@{/admin/policies}" class="nav-link">
+                    <i class="bi bi-file-earmark-text"></i> Policies
+                </a>
+                <a th:classappend="${active=='approvals'} ? 'active'" th:href="@{/admin/approvals}" class="nav-link">
+                    <i class="bi bi-check2-square"></i> Approvals
+                </a>
+                <a th:classappend="${active=='reports'} ? 'active'" th:href="@{/admin/reports}" class="nav-link">
+                    <i class="bi bi-bar-chart"></i> Reports
+                </a>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>

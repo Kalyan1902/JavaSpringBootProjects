@@ -1,0 +1,334 @@
+<!--<!doctype html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="utf-8"/>-->
+<!--    <meta name="viewport" content="width=device-width,initial-scale=1"/>-->
+<!--    <title>Reports - Admin</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/app.css}"/>-->
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div th:replace="~{fragments/admin-header :: header('reports')}"></div>-->
+
+<!--<div class="container">-->
+<!--    <h4 class="page-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 10px;">Reports</h4>-->
+<!--    <p class="subtext" style="font-size: 0.95rem; color: #666; margin-bottom: 25px;">Generate comprehensive reports for analysis</p>-->
+
+<!--    <div class="card" style="margin-bottom:20px; padding: 25px; border: 1px solid #eee; border-radius: 8px;">-->
+<!--        <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px;">Generate Report</div>-->
+
+<!--        <form method="get" th:action="@{/admin/reports}">-->
+<!--            <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 15px; flex-wrap: wrap;">-->
+<!--                <div style="flex: 1; min-width: 200px;">-->
+<!--                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Report Type</label>-->
+<!--                    <select name="type" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; background: white;">-->
+<!--                        <option th:each="t : ${types}"-->
+<!--                                th:value="${t}"-->
+<!--                                th:selected="${t == type}"-->
+<!--                                th:text="${t}">-->
+<!--                            CUSTOMER-->
+<!--                        </option>-->
+<!--                    </select>-->
+<!--                </div>-->
+
+<!--                <div style="flex: 1; min-width: 150px;">-->
+<!--                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Start Date</label>-->
+<!--                    <input type="date" name="startDate" th:value="${start}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">-->
+<!--                </div>-->
+
+<!--                <div style="flex: 1; min-width: 150px;">-->
+<!--                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">End Date</label>-->
+<!--                    <input type="date" name="endDate" th:value="${end}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div style="display: flex; justify-content: flex-start; margin-top: 10px;">-->
+<!--                <button class="btn btn-primary" type="submit" style="padding: 10px 30px; font-weight: 600; border-radius: 4px; cursor: pointer; width: auto;">-->
+<!--                    Generate Report-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--    <div class="card" style="padding: 25px; border: 1px solid #eee; border-radius: 8px;">-->
+<!--        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">-->
+<!--            <div style="display:flex; gap:10px;">-->
+<!--                <a class="btn" th:href="@{/admin/reports/download/pdf(type=${type}, startDate=${start}, endDate=${end})}"-->
+<!--                   style="padding: 6px 15px; font-size: 0.85rem; font-weight: 600; border: 1px solid #333; background: #fff; text-decoration: none; color: #333;">-->
+<!--                    <i class="bi bi-file-pdf"></i> PDF-->
+<!--                </a>-->
+<!--                <a class="btn" th:href="@{/admin/reports/download/excel(type=${type}, startDate=${start}, endDate=${end})}"-->
+<!--                   style="padding: 6px 15px; font-size: 0.85rem; font-weight: 600; border: 1px solid #333; background: #fff; text-decoration: none; color: #333;">-->
+<!--                    <i class="bi bi-file-earmark-excel"></i> Excel-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        <div style="overflow-x: auto;">-->
+<!--            <table class="table" th:if="${type.name() == 'CUSTOMER'}">-->
+<!--                <thead>-->
+<!--                <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Joined</th></tr>-->
+<!--                </thead>-->
+<!--                <tbody style="font-size: 0.95rem;">-->
+<!--                <tr th:each="c : ${rows}">-->
+<!--                    <td th:text="${c.customerId}"></td>-->
+<!--                    <td th:text="${c.name}" style="font-weight: 600;"></td>-->
+<!--                    <td th:text="${c.email}"></td>-->
+<!--                    <td th:text="${c.phone}"></td>-->
+<!--                    <td th:text="${c.createdDate}"></td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+
+<!--            <table class="table" th:if="${type.name() == 'VEHICLE'}">-->
+<!--                <thead>-->
+<!--                <tr><th>Reg No</th><th>Owner</th><th>Make</th><th>Model</th><th>Type</th><th>Added</th></tr>-->
+<!--                </thead>-->
+<!--                <tbody style="font-size: 0.95rem;">-->
+<!--                <tr th:each="v : ${rows}">-->
+<!--                    <td th:text="${v.registrationNumber}" style="font-weight: 600;"></td>-->
+<!--                    <td th:text="${v.customer.name}"></td>-->
+<!--                    <td th:text="${v.make}"></td>-->
+<!--                    <td th:text="${v.model}"></td>-->
+<!--                    <td><span class="badge" style="background:#e0e7ff; color:#4338ca; font-weight: 600;" th:text="${v.vehicleType}"></span></td>-->
+<!--                    <td th:text="${v.createdDate}"></td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+
+<!--            <table class="table" th:if="${type.name() == 'POLICY'}">-->
+<!--                <thead>-->
+<!--                <tr><th>Policy No</th><th>Customer</th><th>Coverage</th><th>Premium</th><th>Status</th></tr>-->
+<!--                </thead>-->
+<!--                <tbody style="font-size: 0.95rem;">-->
+<!--                <tr th:each="p : ${rows}">-->
+<!--                    <td th:text="${p.policyNumber}" style="font-weight: 600;"></td>-->
+<!--                    <td th:text="${p.vehicle.customer.name}"></td>-->
+<!--                    <td th:text="${p.coverageAmount}"></td>-->
+<!--                    <td th:text="${p.premiumAmount}"></td>-->
+<!--                    <td>-->
+<!--                        <span class="badge active" th:if="${p.policyStatus.name()=='ACTIVE'}" style="font-weight: 600;">ACTIVE</span>-->
+<!--                        <span class="badge" th:if="${p.policyStatus.name()=='EXPIRED'}" style="background:#f3f4f6; color:#111827; font-weight: 600;">EXPIRED</span>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+
+<!--            <table class="table" th:if="${type.name() == 'CLAIM'}">-->
+<!--                <thead>-->
+<!--                <tr><th>ID</th><th>Policy</th><th>Customer</th><th>Amount</th><th>Status</th></tr>-->
+<!--                </thead>-->
+<!--                <tbody style="font-size: 0.95rem;">-->
+<!--                <tr th:each="c : ${rows}">-->
+<!--                    <td th:text="${c.claimId}"></td>-->
+<!--                    <td th:text="${c.policy.policyNumber}"></td>-->
+<!--                    <td th:text="${c.policy.vehicle.customer.name}"></td>-->
+<!--                    <td th:text="${c.claimAmount}" style="font-weight: 600;"></td>-->
+<!--                    <td>-->
+<!--                        <span class="badge submitted" th:if="${c.claimStatus.name()=='SUBMITTED'}" style="font-weight:600;">SUBMITTED</span>-->
+<!--                        <span class="badge approved" th:if="${c.claimStatus.name()=='APPROVED'}" style="font-weight:600;">APPROVED</span>-->
+<!--                        <span class="badge rejected" th:if="${c.claimStatus.name()=='REJECTED'}" style="font-weight:600;">REJECTED</span>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+
+<!--        <div th:if="${#lists.isEmpty(rows)}" style="text-align: center; padding: 30px; color: #888;">-->
+<!--            No results found in the selected date range.-->
+<!--        </div>-->
+
+<!--        <div class="card" style="margin-top:25px; background:#f8faff; border: none; padding: 20px;">-->
+<!--            <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px;">Report Summary</div>-->
+
+<!--            <div style="display:flex; justify-content:space-between; gap:40px; flex-wrap: wrap;">-->
+<!--                <div>-->
+<!--                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Total Rows</div>-->
+<!--                    <div style="font-size: 20px; font-weight: 600; margin-top: 5px;" th:text="${count}">0</div>-->
+<!--                </div>-->
+
+<!--                <div th:if="${type.name()=='POLICY'}">-->
+<!--                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Active Policies</div>-->
+<!--                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px;" th:text="${activeCount}">0</div>-->
+<!--                </div>-->
+
+<!--                <div th:if="${type.name()=='CLAIM'}">-->
+<!--                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Approved Claims</div>-->
+<!--                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px;" th:text="${approvedCount}">0</div>-->
+<!--                </div>-->
+
+<!--                <div th:if="${type.name()=='POLICY'}">-->
+<!--                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Total Premium</div>-->
+<!--                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px;" th:text="${totalPremium}">0</div>-->
+<!--                </div>-->
+
+<!--                <div th:if="${type.name()=='CLAIM'}">-->
+<!--                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Total Claimed</div>-->
+<!--                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px;" th:text="${totalClaimed}">0</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>Reports - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+
+<div th:replace="~{fragments/admin-header :: header('reports')}"></div>
+
+<div class="container">
+    <h4 class="page-title" style="font-size: 1.6rem; font-weight: 600; margin-bottom: 10px;">Reports</h4>
+    <p class="subtext" style="font-size: 0.95rem; color: #666; margin-bottom: 25px;">Generate comprehensive reports for analysis</p>
+
+    <div th:if="${errorMessage}" class="alert error" style="margin-bottom:14px;">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <div class="card" style="margin-bottom:20px; padding: 25px; border: 1px solid #eee; border-radius: 8px;">
+        <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px;">Generate Report</div>
+
+        <form method="get" th:action="@{/admin/reports}">
+            <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 15px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px;">
+                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Report Type</label>
+                    <select name="type" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 6px; background: white;">
+                        <option th:each="t : ${types}"
+                                th:value="${t}"
+                                th:selected="${type != null and t == type}"
+                                th:text="${t}">
+                            POLICY
+                        </option>
+                    </select>
+                </div>
+
+                <div style="flex: 1; min-width: 150px;">
+                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">Start Date</label>
+                    <input type="date" name="startDate" th:value="${start}"
+                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+
+                <div style="flex: 1; min-width: 150px;">
+                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 6px;">End Date</label>
+                    <input type="date" name="endDate" th:value="${end}"
+                           style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-start; margin-top: 10px;">
+                <button class="btn btn-primary" type="submit"
+                        style="padding: 10px 30px; font-weight: 600; border-radius: 4px; cursor: pointer; width: auto;">
+                    Generate Report
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ✅ Results only after Generate -->
+    <div class="card" th:if="${generated}" style="padding: 25px; border: 1px solid #eee; border-radius: 8px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <div style="display:flex; gap:10px;">
+                <a class="btn" th:href="@{/admin/reports/download/pdf(type=${type}, startDate=${start}, endDate=${end})}"
+                   style="padding: 6px 15px; font-size: 0.85rem; font-weight: 600; border: 1px solid #333; background: #fff; text-decoration: none; color: #333;">
+                    <i class="bi bi-file-pdf"></i> PDF
+                </a>
+                <a class="btn" th:href="@{/admin/reports/download/excel(type=${type}, startDate=${start}, endDate=${end})}"
+                   style="padding: 6px 15px; font-size: 0.85rem; font-weight: 600; border: 1px solid #333; background: #fff; text-decoration: none; color: #333;">
+                    <i class="bi bi-file-earmark-excel"></i> Excel
+                </a>
+            </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+
+            <!-- POLICY TABLE -->
+            <table class="table" th:if="${type != null and type.name() == 'POLICY'}">
+                <thead>
+                <tr><th>Policy No</th><th>Customer</th><th>Coverage</th><th>Premium</th><th>Status</th></tr>
+                </thead>
+                <tbody style="font-size: 0.95rem;">
+                <tr th:each="p : ${rows}">
+                    <td th:text="${p.policyNumber}" style="font-weight: 600;"></td>
+                    <td th:text="${p.vehicle.customer.name}"></td>
+                    <td th:text="${p.coverageAmount}"></td>
+                    <td th:text="${p.premiumAmount}"></td>
+                    <td>
+                        <span class="badge active" th:if="${p.policyStatus.name()=='ACTIVE'}" style="font-weight: 600;">ACTIVE</span>
+                        <span class="badge" th:if="${p.policyStatus.name()=='EXPIRED'}" style="background:#f3f4f6; color:#111827; font-weight: 600;">EXPIRED</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- CLAIM TABLE -->
+            <table class="table" th:if="${type != null and type.name() == 'CLAIM'}">
+                <thead>
+                <tr><th>ID</th><th>Policy</th><th>Customer</th><th>Amount</th><th>Status</th></tr>
+                </thead>
+                <tbody style="font-size: 0.95rem;">
+                <tr th:each="c : ${rows}">
+                    <td th:text="${c.claimId}"></td>
+                    <td th:text="${c.policy.policyNumber}"></td>
+                    <td th:text="${c.policy.vehicle.customer.name}"></td>
+                    <td th:text="${c.claimAmount}" style="font-weight: 600;"></td>
+                    <td>
+                        <span class="badge submitted" th:if="${c.claimStatus.name()=='SUBMITTED'}" style="font-weight:600;">SUBMITTED</span>
+                        <span class="badge approved" th:if="${c.claimStatus.name()=='APPROVED'}" style="font-weight:600;">APPROVED</span>
+                        <span class="badge rejected" th:if="${c.claimStatus.name()=='REJECTED'}" style="font-weight:600;">REJECTED</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div th:if="${rows == null or #lists.isEmpty(rows)}" style="text-align: center; padding: 30px; color: #888;">
+            No results found in the selected date range.
+        </div>
+
+        <div class="card" style="margin-top:25px; background:#f8faff; border: none; padding: 20px;">
+            <div style="font-weight: 600; font-size: 1.1rem; margin-bottom: 15px;">Report Summary</div>
+
+            <div style="display:flex; justify-content:space-between; gap:40px; flex-wrap: wrap;">
+                <div>
+                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Total Rows</div>
+                    <div style="font-size: 20px; font-weight: 600; margin-top: 5px;" th:text="${count}">0</div>
+                </div>
+
+                <div th:if="${type != null and type.name()=='POLICY'}">
+                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Active Policies</div>
+                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px;" th:text="${activeCount}">0</div>
+                </div>
+
+                <div th:if="${type != null and type.name()=='CLAIM'}">
+                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Approved Claims</div>
+                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px;" th:text="${approvedCount}">0</div>
+                </div>
+
+                <div th:if="${type != null and type.name()=='POLICY'}">
+                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Total Premium</div>
+                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px;" th:text="${totalPremium}">0</div>
+                </div>
+
+                <div th:if="${type != null and type.name()=='CLAIM'}">
+                    <div style="color: #666; font-size: 0.9rem; font-weight: 600;">Total Claimed</div>
+                    <div style="font-size: 24px; font-weight: 600; margin-top: 5px;" th:text="${totalClaimed}">0</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
