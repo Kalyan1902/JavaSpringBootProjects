@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+
+        select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+    background: #f9f9f9;
+    transition: 0.3s;
+    cursor: pointer;
+    color: #333; /* default text color */
+}
+
+select:focus {
+    border-color: #4a69bd;
+    outline: none;
+    box-shadow: 0 0 6px rgba(74,105,189,0.3);
+    background: #fff;
+}
+
+select option {
+    padding: 10px;
+}
+
+/* Style the placeholder option */
+select option[value=""] {
+    color: #999; /* grey placeholder text */
+}
+
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #4a69bd, #6a89cc);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            background: #fff;
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            animation: fadeIn 0.4s ease;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+        input:focus {
+            border-color: #4a69bd;
+            outline: none;
+            box-shadow: 0 0 6px rgba(74,105,189,0.3);
+        }
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(90deg, #4a69bd, #6a89cc);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+        .login-link a {
+            color: #4a69bd;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>📝 Register</h2>
+    <form th:action="@{/register}" method="post" th:object="${user}">
+        <label>Name</label>
+        <input type="text" th:field="*{name}" placeholder="Enter your full name" required />
+
+        <label>Gender</label>
+        <select th:field="*{gender}" required>
+            <option value="">Select Gender</option>
+            <option value="Male">👨 Male</option>
+            <option value="Female">👩 Female</option>
+            <option value="Other">🌈 Other</option>
+        </select>
+
+
+        <label>Email</label>
+        <input type="text" th:field="*{email}" placeholder="Enter your email" required />
+
+        <label>Mobile</label>
+        <input type="text" th:field="*{mobile}" placeholder="Enter your mobile number" required />
+
+        <label>Password</label>
+        <input type="password" th:field="*{password}" placeholder="Create a password" required />
+
+        <label>Address</label>
+        <input type="text" th:field="*{address}" placeholder="Enter your address" />
+
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <div class="login-link">
+        <p>Already registered? <a th:href="@{/login}">Login here</a></p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Rename File</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #4a69bd, #6a89cc);
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .rename-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            width: 360px;
+            animation: fadeIn 0.4s ease;
+        }
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #4a69bd;
+            outline: none;
+            box-shadow: 0 0 6px rgba(74,105,189,0.3);
+        }
+        button {
+            background: linear-gradient(90deg, #4a69bd, #6a89cc);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="rename-box">
+    <h2>✏️ Rename File</h2>
+    <form th:action="@{/rename-file}" method="post">
+        <input type="hidden" name="oldName" th:value="${fileName}"/>
+        <label for="newName">New Name:</label>
+        <input type="text" id="newName" name="newName" placeholder="Enter new file name" required/>
+        <button type="submit">Rename</button>
+    </form>
+</div>
+</body>
+</html>

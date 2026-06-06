@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${adminMode} ? 'All Users\' Files' : 'My Files'"></title>
+
+    <style>
+        /* Reset + Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    color: #2c3e50;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Header layout with three zones: left, center, right */
+header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* left, center, right */
+    align-items: center;
+    background: linear-gradient(135deg, #4a90e2, #357abd);
+    color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Left side: Title */
+header h2 {
+    justify-self: start;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Center: Welcome text */
+header .welcome {
+    justify-self: center;
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Right side: Logout button */
+header form {
+    justify-self: end;
+    margin: 0; /* remove inline margin-left */
+}
+
+/* Logout button styling */
+.logout-btn {
+    background: #e74c3c;
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+.logout-btn:hover {
+    background: #c0392b;
+}
+
+
+
+/* Search Bar */
+header form input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+    transition: border 0.3s ease;
+}
+header form input[type="text"]:focus {
+    border-color: #4a90e2;
+}
+header form .action-btn {
+    background: #2ecc71;
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: background 0.3s ease;
+}
+header form .action-btn:hover {
+    background: #27ae60;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    table-layout: fixed; /* ✅ ensures consistent column widths */
+}
+
+table thead {
+    background: #f0f2f5;
+}
+
+table th, table td {
+    padding: 12px 16px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+table th:nth-child(1), table td:nth-child(1) {
+    width: 40%; /* ✅ File Name column */
+    word-wrap: break-word; /* wrap long names instead of pushing layout */
+}
+
+table th:nth-child(2), table td:nth-child(2) {
+    width: 60%; /* ✅ Actions column */
+    text-align: left; /* align buttons neatly */
+}
+
+table tr {
+    border-bottom: 1px solid #eee;
+}
+
+table tr:hover {
+    background: #f9fbfd;
+}
+
+
+/* Action Buttons (both <a> and <button>) */
+.action-btn {
+    text-decoration: none;   /* removes underline from <a> */
+    display: inline-block;
+    background: #4a90e2;
+    border: none;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 0 4px;
+    font-size: 0.9rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+.action-btn:hover {
+    background: #357abd;
+    transform: translateY(-2px);
+}
+.delete-btn {
+    background: #e74c3c;
+}
+.delete-btn:hover {
+    background: #c0392b;
+}
+.rename-btn {
+    background: #f39c12;
+}
+.rename-btn:hover {
+    background: #d35400;
+}
+
+/* Modals */
+#metadataModal, #renameModal, #changeUserModal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.metadata-content, #renameModal > div, #changeUserModal > div {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 360px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    animation: fadeIn 0.3s ease;
+}
+
+.metadata-content h3, #renameModal h3, #changeUserModal h3 {
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    color: #2c3e50;
+}
+
+.close-btn {
+    background: #bdc3c7;
+    border: none;
+    color: #2c3e50;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+.close-btn:hover {
+    background: #95a5a6;
+}
+
+/* Add More */
+.add-more {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    background: #2ecc71;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+.add-more:hover {
+    background: #27ae60;
+    transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+        .toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4a69bd;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    animation: fadeInOut 3s ease forwards;
+    z-index: 9999;
+}
+.toast.success { background: #2ecc71; }
+.toast.error { background: #e74c3c; }
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
+
+    </style>
+
+    <script>
+        function showMetadataFromLink(link) {
+          // Always show metadata info
+          document.getElementById("metaNameText").textContent = link.dataset.name;
+          document.getElementById("metaSize").textContent = link.dataset.size;
+          document.getElementById("metaTypeText").textContent = link.dataset.type;
+          document.getElementById("metaDate").textContent = link.dataset.date;
+          document.getElementById("metaUser").textContent = link.dataset.user;
+
+          // Admin editable form
+          if (document.getElementById("metaFileName")) {
+            document.getElementById("metaFileName").value = link.dataset.name;
+            document.getElementById("metaUserId").value = link.dataset.userid;
+            document.getElementById("metaNameInput").value = link.dataset.name;
+            document.getElementById("metaTypeInput").value = link.dataset.type;
+            document.getElementById("metadataForm").action = "/admin/edit-metadata/" + link.dataset.userid;
+          }
+          document.getElementById("metadataModal").style.display = "flex";
+        }
+        function closeMetadata() { document.getElementById("metadataModal").style.display = "none"; }
+
+        function openRenameModal(button) {
+          const fileName = button.getAttribute("data-filename");
+          const userId = button.getAttribute("data-userid");
+
+          const lastDot = fileName.lastIndexOf(".");
+          const baseName = lastDot > 0 ? fileName.substring(0, lastDot) : fileName;
+          const extension = lastDot > 0 ? fileName.substring(lastDot) : "";
+
+          document.getElementById("oldNameInput").value = fileName;
+          document.getElementById("newBaseNameInput").value = baseName;
+          document.getElementById("fileExtensionText").textContent = extension;
+
+          const form = document.getElementById("renameForm");
+          const adminMode = document.body.getAttribute("data-adminMode") === "true";
+          form.action = adminMode ? "/admin/rename-file" : "/user/rename-file";
+
+          if (adminMode) {
+            let hiddenUserId = document.getElementById("userIdInput");
+            if (!hiddenUserId) {
+              hiddenUserId = document.createElement("input");
+              hiddenUserId.type = "hidden";
+              hiddenUserId.name = "userId";
+              hiddenUserId.id = "userIdInput";
+              form.appendChild(hiddenUserId);
+            }
+            hiddenUserId.value = userId;
+          }
+          document.getElementById("renameModal").style.display = "flex";
+        }
+        function closeRenameModal() { document.getElementById("renameModal").style.display = "none"; }
+
+        function openChangeUserModal(button) {
+    document.getElementById("changeUserFileName").value = button.getAttribute("data-filename");
+    document.getElementById("changeUserCurrentUserId").value = button.getAttribute("data-userid");
+    document.getElementById("changeUserModal").style.display = "flex";
+}
+
+
+    </script>
+
+</head>
+<body th:attr="data-adminMode=${adminMode}">
+
+<div th:if="${message}" class="toast success">
+    <span th:text="${message}"></span>
+</div>
+<div th:if="${error}" class="toast error">
+    <span th:text="${error}"></span>
+</div>
+
+<header>
+    <h2 th:text="${adminMode} ? '📂 All Users\' Files' : '📂 My Files'"></h2>
+    <div style="display:flex; align-items:center;">
+        <div class="welcome">
+            <span th:if="${adminMode}">Admin Mode: Viewing all users</span>
+            <span th:unless="${adminMode}">Current User: <span th:text="${username}"></span></span>
+        </div>
+        <form th:action="@{/logout}" method="post" style="margin-left:20px;">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+
+    <form th:action="${adminMode} ? @{/admin/all-files} : @{/user/my-files}" method="get" style="margin-top:20px; text-align:right;">
+        <input type="text" name="searchTerm" placeholder="Search files..." th:value="${searchTerm}" />
+        <button type="submit" class="action-btn">Search</button>
+    </form>
+</header>
+
+<!-- Admin mode -->
+<div th:if="${adminMode}" th:each="entry : ${filesByUser}">
+    <h3>User: <span th:text="${entry.key.email}"></span></h3>
+    <table>
+        <thead><tr><th>File Name</th><th>Actions</th></tr></thead>
+        <tbody>
+        <tr th:each="file : ${entry.value}" th:with="formattedDate=${#temporals.format(file.uploadDate, 'yyyy-MM-dd HH:mm:ss')}">
+            <td>
+                <a href="javascript:void(0)"
+                   th:attr="data-name=${file.name}, data-size=${file.formattedSize}, data-type=${file.type},
+                    data-date=${formattedDate}, data-user=${file.userEmail}, data-userid=${file.userId}"
+                   onclick="showMetadataFromLink(this)">
+                    <span th:text="${file.name}"></span>
+                </a>
+            </td>
+            <td>
+                <a th:href="@{/admin/view/{userId}/{fileName}(userId=${file.userId}, fileName=${file.name})}" target="_blank" class="action-btn">Open</a>
+                <a th:href="@{/admin/download/{userId}/{fileName}(userId=${file.userId}, fileName=${file.name})}" class="action-btn">Download</a>
+                <form th:action="@{/admin/delete/{userId}/{fileName}(userId=${file.userId}, fileName=${file.name})}" method="post" style="display:inline;">
+                    <button type="submit" class="action-btn delete-btn">Delete</button>
+                </form>
+                <button type="button" class="action-btn rename-btn"
+                        th:attr="data-filename=${file.name}, data-userid=${file.userId}"
+                        onclick="openRenameModal(this)">Rename</button>
+                <!-- ✅ Correct placement: Move File button for Admin -->
+                <button type="button" class="action-btn"
+                        th:attr="data-filename=${file.name}, data-userid=${file.userId}"
+                        onclick="openChangeUserModal(this)">Move File</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- User mode -->
+<div th:unless="${adminMode}">
+    <table>
+        <thead><tr><th>File Name</th><th>Actions</th></tr></thead>
+        <tbody>
+        <tr th:each="file : ${files}" th:with="formattedDate=${#temporals.format(file.uploadDate, 'yyyy-MM-dd HH:mm:ss')}">
+            <td>
+                <a href="javascript:void(0)"
+                   th:attr="data-name=${file.name}, data-size=${file.formattedSize}, data-type=${file.type},
+                    data-date=${formattedDate}, data-user=${username}"
+                   onclick="showMetadataFromLink(this)">
+                    <span th:text="${file.name}"></span>
+                </a>
+            </td>
+            <td>
+                <form th:action="@{/user/view-file}" method="get" target="_blank" style="display:inline;">
+                    <input type="hidden" name="fileName" th:value="${file.name}" />
+                    <button type="submit" class="action-btn">Open</button>
+                </form>
+                <form th:action="@{/user/download}" method="get" style="display:inline;">
+                    <input type="hidden" name="fileName" th:value="${file.name}" />
+                    <button type="submit" class="action-btn">Download</button>
+                </form>
+                <button type="button" class="action-btn rename-btn"
+                        th:attr="data-filename=${file.name}"
+                        onclick="openRenameModal(this)">Rename</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Change User Modal -->
+<div id="changeUserModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+     background:rgba(0,0,0,0.6); justify-content:center; align-items:center;">
+    <div style="background:#fff; padding:25px; border-radius:12px; width:320px;">
+        <h3>Move File to Another User</h3>
+        <form id="changeUserForm" th:action="@{/admin/change-user}" method="post">
+            <input type="hidden" name="fileName" id="changeUserFileName" />
+            <input type="hidden" name="currentUserId" id="changeUserCurrentUserId" />
+
+            <label>Select New User:</label>
+            <select name="newUserId" required>
+                <option th:each="u : ${allUsers}" th:value="${u.id}" th:text="${u.email}"></option>
+            </select>
+
+            <div style="text-align:right; margin-top:12px;">
+                <button type="submit" class="action-btn">Move</button>
+                <button type="button" class="close-btn" onclick="document.getElementById('changeUserModal').style.display='none'">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Metadata Modal -->
+<div id="metadataModal" style="display:none;">
+    <div class="metadata-content">
+        <h3>File Metadata</h3>
+        <div>
+            <p><strong>Name:</strong> <span id="metaNameText"></span></p>
+            <p><strong>Size:</strong> <span id="metaSize"></span></p>
+            <p><strong>Type:</strong> <span id="metaTypeText"></span></p>
+            <p><strong>Upload Date:</strong> <span id="metaDate"></span></p>
+            <p><strong>User:</strong> <span id="metaUser"></span></p>
+            <button class="close-btn" onclick="closeMetadata()">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Rename Modal -->
+<div id="renameModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+     background:rgba(0,0,0,0.6); justify-content:center; align-items:center;">
+    <div style="background:#fff; padding:25px; border-radius:12px; width:320px;">
+        <h3 style="margin-top:0; color:#2c3e50;">Rename File</h3>
+        <form id="renameForm" method="post">
+            <input type="hidden" id="oldNameInput" name="oldName" />
+            <input type="hidden" id="userIdInput" name="userId" th:if="${adminMode}" />
+
+            <input type="text" id="newBaseNameInput" placeholder="Enter new file name" required />
+            <span id="fileExtensionText" style="margin-left:8px; font-weight:bold;"></span>
+            <input type="hidden" id="newNameInput" name="newName" />
+
+            <div style="text-align:right; margin-top:12px;">
+                <button type="submit" class="action-btn rename-btn"
+                        onclick="document.getElementById('newNameInput').value =
+                         document.getElementById('newBaseNameInput').value + document.getElementById('fileExtensionText').textContent;">
+                    Rename
+                </button>
+                <button type="button" class="close-btn" onclick="closeRenameModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<a th:unless="${adminMode}" th:href="@{/uploader}" class="add-more">➕ Add More</a>
+</body>
+</html>
